@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nike__project/feture/presentation/screens/onBoarding_Screen.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }

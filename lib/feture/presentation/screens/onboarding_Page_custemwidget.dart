@@ -7,12 +7,12 @@ class OnboardingPage extends StatelessWidget {
   final VoidCallback onNext;
 
   const OnboardingPage({
-    Key? key,
+    super.key,
     required this.image,
     required this.title,
     required this.description,
     required this.onNext,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class OnboardingPage extends StatelessWidget {
         const SizedBox(height: 20),
         ElevatedButton(
           onPressed: onNext,
-          child: const Text('التالي'),
+          child: const Text('Next'),
         ),
       ],
     );

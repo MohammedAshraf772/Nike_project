@@ -29,13 +29,16 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   cupertino_icons: ^1.0.8
+  dio: ^5.7.0
   flutter:
     sdk: flutter
-  http: ^1.2.2
+  permission_handler: ^11.3.1
+  pin_code_fields: ^8.0.1
+  provider: ^6.1.2
   smooth_page_indicator: ^1.2.0+3
 
 dev_dependencies:
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
 
@@ -51,10 +54,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/Nike.png
-    - assets/images/image 3.png
-    - assets/images/Wellcome To Nike.png
-
+    - assets/images/
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
