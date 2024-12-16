@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:nike__project/feture/presentation/screens/otp_screen.dart';
 
-class ForgotPasswordScreen extends StatelessWidget {
+class ForgotPasswordScreen extends StatefulWidget {
+  @override
+  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
+}
+
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  bool _isOtpSent = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("forgot my password?"),
+        title: Text("Forgot my password?"),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: Padding(
@@ -24,6 +32,8 @@ class ForgotPasswordScreen extends StatelessWidget {
             ),
             SizedBox(height: 20),
             TextField(
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 hintText: 'e-mail',
                 border: OutlineInputBorder(),
@@ -31,12 +41,37 @@ class ForgotPasswordScreen extends StatelessWidget {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                // هنا يمكنك إضافة منطق لإرسال رابط إعادة تعيين كلمة المرور
-                print('The reset password button has been pressed');
+              onPressed: () async {
+                final email = _emailController.text;
+                if (email.isNotEmpty && email.contains('@')) {
+                  setState(() {
+                    _isOtpSent = true;
+                  });
+                  await Future.delayed(Duration(seconds: 1));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OTPScreen(email: email),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Please enter a valid email address'),
+                    ),
+                  );
+                }
               },
               child: Text('Reset password'),
             ),
+            if (_isOtpSent)
+              Center(
+                child: Text(
+                  'A verification code has been sent to your email.',
+                  style:
+                      TextStyle(color: const Color.fromARGB(255, 54, 66, 238)),
+                ),
+              ),
           ],
         ),
       ),

@@ -41,7 +41,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             description:
                 'There Are Many Beautful And Attractive Plan to your Room',
             onNext: () {
-              // الانتقال إلى صفحة تسجيل الدخول
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Login()),
