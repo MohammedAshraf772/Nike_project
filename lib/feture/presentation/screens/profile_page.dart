@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:nike__project/feture/presentation/screens/home_screen.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -11,7 +13,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   File? _image;
   final picker = ImagePicker();
-  final imageKey = UniqueKey(); // Key for Image widget to maintain state
+  final imageKey = UniqueKey();
 
   @override
   void initState() {
@@ -25,6 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
     if (imagePath != null) {
       setState(() {
         _image = File(imagePath);
+        HomeScreen.profileImagePath = imagePath;
       });
     }
   }
@@ -37,10 +40,13 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await picker.pickImage(source: source);
     if (pickedFile != null) {
+      final appDirectory = await getApplicationDocumentsDirectory();
+      final savedImage = await File(pickedFile.path)
+          .copy('${appDirectory.path}/${pickedFile.name}');
       setState(() {
-        _image = File(pickedFile.path);
-        _saveImageToSharedPrefs(
-            pickedFile.path); // Save image path to SharedPreferences
+        _image = savedImage;
+        _saveImageToSharedPrefs(savedImage.path);
+        HomeScreen.profileImagePath = savedImage.path;
       });
     }
   }
@@ -68,57 +74,48 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Profile')),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: _image != null ? () => _showImagePreview(context) : null,
-              child: Stack(
-                children: [
-                  _image != null
-                      ? CircleAvatar(
-                          key: imageKey,
-                          radius: 50,
-                          backgroundImage: FileImage(_image!),
-                        )
-                      : CircleAvatar(
-                          radius: 50,
-                          backgroundImage:
-                              AssetImage("assets/images/download (1).png"),
-                        ),
-                  Positioned(
-                    right: 5,
-                    bottom: 5,
-                    child: FloatingActionButton(
-                      onPressed: () => _showImagePickerDialog(context),
-                      child: Icon(Icons.camera_alt),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: _image != null ? () => _showImagePreview(context) : null,
+                child: Stack(
+                  children: [
+                    _image != null
+                        ? CircleAvatar(
+                            key: imageKey,
+                            radius: 50,
+                            backgroundImage: FileImage(_image!),
+                          )
+                        : CircleAvatar(
+                            radius: 50,
+                            backgroundImage:
+                                AssetImage("assets/images/download (1).png"),
+                          ),
+                    Positioned(
+                      right: 5,
+                      bottom: 5,
+                      child: FloatingActionButton(
+                        onPressed: () => _showImagePickerDialog(context),
+                        child: Icon(Icons.camera_alt),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 15),
-            Text("EraaSoft"),
-            SizedBox(height: 15),
-            Text("eraasoft@gamil.com"),
-            Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  TextField(
-                    decoration: InputDecoration(labelText: "Profile Name"),
-                  ),
-                  SizedBox(height: 15),
-                  TextField(
-                    decoration: InputDecoration(labelText: "Profile Name"),
-                  ),
-                  ElevatedButton(onPressed: () {}, child: Text("Done"))
-                ],
+              SizedBox(height: 15),
+              Text(HomeScreen.userName),
+              SizedBox(height: 15),
+              Text(HomeScreen.userEmail),
+              Padding(
+                padding: EdgeInsets.all(16),
               ),
-            )
-          ],
+              Spacer()
+            ],
+          ),
         ),
       ),
     );

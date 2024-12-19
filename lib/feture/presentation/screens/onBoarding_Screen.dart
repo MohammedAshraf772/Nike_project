@@ -1,51 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:nike__project/feture/presentation/screens/login.dart';
 
-import 'onboarding_Page_custemwidget.dart';
-
-class OnBoardingScreen extends StatefulWidget {
-  const OnBoardingScreen({super.key});
-
+class AdsScreen extends StatefulWidget {
   @override
-  _OnBoardingScreenState createState() => _OnBoardingScreenState();
+  _AdsScreenState createState() => _AdsScreenState();
 }
 
-class _OnBoardingScreenState extends State<OnBoardingScreen> {
-  final PageController _controller = PageController();
-  final int _currentPage = 0;
+class _AdsScreenState extends State<AdsScreen> {
+  int _currentAdIndex = 0;
+  final List<String> _ads = [
+    'assets/images/Aire Jordan Nike.png',
+    'assets/images/Spring_prev_ui 1.png',
+    'assets/images/image 3.png'
+  ];
+
+  void _skipAds() {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => Login(),
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue,
-      body: PageView(
-        controller: _controller,
+      backgroundColor: Colors.blue, // خلفية زرقاء
+      body: Stack(
         children: [
-          OnboardingPage(
-            image: 'assets/images/image 3.png',
-            title: 'Wellcome To Nike',
-            description: '  ',
-            onNext: () => _controller.nextPage(
-                duration: Duration(milliseconds: 300), curve: Curves.easeIn),
-          ),
-          OnboardingPage(
-            image: 'assets/images/Spring_prev_ui 1.png',
-            title: "Let's Start Journey with Nike",
-            description: 'Smart,Gorgeous&Fashionable Collection Explor Now ',
-            onNext: () => _controller.nextPage(
-                duration: Duration(milliseconds: 300), curve: Curves.easeIn),
-          ),
-          OnboardingPage(
-            image: 'assets/images/Aire Jordan Nike.png',
-            title: ' You Have the power to',
-            description:
-                'There Are Many Beautful And Attractive Plan to your Room',
-            onNext: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Login()),
+          PageView.builder(
+            itemCount: _ads.length,
+            onPageChanged: (index) {
+              setState(() {
+                _currentAdIndex = index;
+              });
+            },
+            itemBuilder: (context, index) {
+              return Center(
+                child: Image.asset(_ads[index]),
               );
             },
+          ),
+          Positioned(
+            top: 40,
+            left: 20,
+            child: IconButton(
+              icon: Icon(Icons.close, color: Colors.white, size: 30),
+              onPressed: _skipAds,
+            ),
           ),
         ],
       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nike__project/feture/presentation/screens/home_screen.dart';
 
-import 'Home_Screen/home_screen.dart';
 import 'forgot_password.dart';
 import 'register_screen.dart';
 
@@ -27,7 +27,6 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
